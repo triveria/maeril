@@ -18,23 +18,41 @@ def init_logging(verbose: bool):
     """
     log_level = logging.DEBUG if verbose else logging.INFO
 
-    # Remove all handlers associated with the root logger.
+    # Remove all handlers associated with the root logger to prevent duplicate logs
     for handler in logging.root.handlers[:]:
         logging.root.removeHandler(handler)
     
-    # Configure logging with RichHandler
+    # Configure RichHandler with conditional formatting based on the log level
+    if verbose:
+        # In DEBUG mode, show time, level, and path
+        handler = RichHandler(
+            rich_tracebacks=True,
+            show_time=True,
+            show_level=True,
+            show_path=True
+        )
+    else:
+        # In INFO mode, show only the message
+        handler = RichHandler(
+            rich_tracebacks=False,
+            show_time=False,
+            show_level=False,
+            show_path=False
+        )
+    
     logging.basicConfig(
         level=log_level,
-        format="%(message)s",
-        datefmt="[%X]",
-        handlers=[RichHandler(rich_tracebacks=True)]
+        format="%(message)s",  # Simplified format; RichHandler will handle the rest
+        handlers=[handler]
     )
 
-logger = logging.getLogger("rich")
+logger = logging.getLogger(__name__)
 
 @app.callback()
 def callback(
-        verbose: bool = typer.Option(False, "-v", "--verbose", help="Enable verbose (DEBUG) logging")
+        verbose: bool = typer.Option(
+            False, "-v", "--verbose", help="Enable verbose (DEBUG) logging"
+        )
     ):
     """Initialize logging based on verbosity."""
     init_logging(verbose)
