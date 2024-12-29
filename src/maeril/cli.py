@@ -3,7 +3,7 @@ import typer
 from rich.console import Console
 from rich.logging import RichHandler
 from . import prompt
-
+from . import dump
 
 app = typer.Typer()
 console = Console()
@@ -58,16 +58,16 @@ def callback(
     init_logging(verbose)
     logger.debug("Logging initialized. Verbose mode is enabled.")
 
-@app.command()
-def main():
-    """Main command for maeril."""
-    console.print("Replace this message by putting your code into maeril.cli.main")
-    console.print("See Typer documentation at https://typer.tiangolo.com/")
 
 @app.command("prompt")
 def prompt_cmd(input_path: str):
     """Process the input file using the prompt module."""
     prompt.main(input_path)
+
+@app.command("dump")
+def dump_cmd(file_name: str = typer.Argument(None), list: bool = typer.Option(False, "--list", "-l", help="List all available files")):
+    """Dump files from dump_files directory."""
+    dump.main(file_name, list)
 
 
 if __name__ == "__main__":
