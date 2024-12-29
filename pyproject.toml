@@ -8,10 +8,10 @@ version = "0.1.0"
 description = "Ensemble of Random Tools"
 readme = "README.rst"
 authors = [
-  {name = "Michael Wagner", email = "-"}
+  {name = "Michael Wagner"}
 ]
 maintainers = [
-  {name = "Michael Wagner", email = "-"}
+  {name = "Michael Wagner"}
 ]
 classifiers = [
 
@@ -24,9 +24,9 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "coverage",  # testing
-    "mypy",  # linting
-    "pytest",  # testing
-    "ruff"  # linting
+    "mypy",      # linting
+    "pytest",    # testing
+    "ruff"       # linting
 ]
 
 [project.urls]
@@ -61,3 +61,6 @@ module = "tests.*"
 allow_untyped_defs = true
 disable_error_code = "attr-defined"
 
+# Add the scripts section below
+[project.scripts]
+maeril = "maeril.cli:app"
