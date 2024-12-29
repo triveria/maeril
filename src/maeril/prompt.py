@@ -3,11 +3,12 @@ import subprocess
 from pathlib import Path
 import tiktoken
 import pyperclip
+import logging
 
 
 def copy_to_clipboard(text):
     pyperclip.copy(text)
-    print("Text has been copied to clipboard")
+    logging.info("Text has been copied to clipboard")
 
 
 def print_token_usage(text, model="o1-mini"):
@@ -36,9 +37,9 @@ def print_token_usage(text, model="o1-mini"):
     num_tokens = len(tokens)
     cost = num_tokens * cost_per_token
 
-    print(f"Number of tokens: {num_tokens}")
-    print(f"Your prompt is roughly {num_tokens / 450:.1f} book pages long and fills out {num_tokens / context_window * 100:.0f}% of {name}'s {context_window/1000:.0f}k token context window.")
-    print(f"Cost: ${cost:.6f} (Remember: 1 minute of your time costs 1€)")
+    logging.info(f"Number of tokens: {num_tokens}")
+    logging.info(f"Your prompt is roughly {num_tokens / 450:.1f} book pages long and fills out {num_tokens / context_window * 100:.0f}% of {name}'s {context_window/1000:.0f}k token context window.")
+    logging.info(f"Cost: ${cost:.6f} (Remember: 1 minute of your time costs 1€)")
 
 
 def replace_codefile(match):
@@ -102,7 +103,7 @@ def main(input_path):
     output_path = input_path.with_name(output_filename)
 
     Path(output_path).write_text(generated_prompt)
-    print(f"Converted {input_path} to {output_path}")
+    logging.info(f"Translated {input_path} to {output_path}")
 
     copy_to_clipboard(generated_prompt)
     print_token_usage(generated_prompt)
