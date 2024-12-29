@@ -47,7 +47,7 @@ def main(input_path):
     comment_pattern = re.compile(r'<!--.*-->')
 
     input_md = Path(input_path).read_text()
-    input_md.rstrip()
+    input_md = input_md.rstrip()  # Remove trailing whitespace and newlines
 
     output_lines = []
     for line in input_md.splitlines():
@@ -60,6 +60,9 @@ def main(input_path):
     converted_md_content = ""
     for line in output_lines:
         converted_md_content += line + "\n"
+
+    # Ensure the content ends with exactly one newline
+    converted_md_content = converted_md_content.rstrip('\n') + '\n'
 
     output_path = "output.md"
     Path(output_path).write_text(converted_md_content)
