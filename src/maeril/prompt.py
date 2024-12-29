@@ -5,15 +5,40 @@ from pathlib import Path
 
 def replace_codefile(match):
     filepath_str = match.group(1).strip()
-    return generate_codefile_block(filepath_str)
-
-
-def generate_codefile_block(filepath_str):
     filepath = Path(filepath_str)
-    content = filepath.read_text()
-    content_with_lines = '\n'.join(f"{i+1}: {line}" for i, line in enumerate(content.splitlines()))
-    extension = filepath.suffix[1:] or 'text'
-    return f"```{extension}\n## content of {filepath}, including line numbers.\n{content_with_lines}\n```"
+    file_content = filepath.read_text()
+    lines = file_content.splitlines()
+
+    content_with_line_numbers = ""
+    for line_number, line in enumerate(lines, start=1):
+        content_with_line_numbers += f"{line_number:3}: {line}\n"
+
+    # Extract the file extension for setting markdown hint
+    md_hint = filepath.suffix.lower().lstrip(".") if filepath.suffix else 'text'
+
+    formatted_code_block = (
+        f"## {filepath}\n"
+        f"\n"
+        f"(With line numbers as a guide)\n"
+        f"```{md_hint}\n"
+        f"{content_with_line_numbers}"
+        f"```\n"
+    )
+
+    return formatted_code_block
+
+
+def replace_command(match):
+    command = match.group(1).strip()
+    command_output = subprocess.check_output(command, shell=True, text=True).rstrip()
+    formatted_command_block = (
+        f"## output of `{command}`\n"
+        f"\n"
+        f"```sh\n"
+        f"{command_output}\n"
+        "```"
+    )
+    return formatted_command_block
 
 
 def main(input_path):
@@ -22,24 +47,20 @@ def main(input_path):
     comment_pattern = re.compile(r'<!--.*-->')
 
     input_md = Path(input_path).read_text()
+    input_md.rstrip()
 
     output_lines = []
     for line in input_md.splitlines():
         if comment_pattern.search(line):
             continue  # Skip lines containing comments
-        # Replace [command: ...]
-        line = command_pattern.sub(
-            lambda m: f"```sh\n## output of `{m.group(1).strip()}`\n{subprocess.check_output(m.group(1).strip(), shell=True, text=True).rstrip()}\n```",
-            line
-        )
-        # Replace [codefile: ...]
-        line = codefile_pattern.sub(
-            replace_codefile,
-            line
-        )
+        line = command_pattern.sub(replace_command, line)
+        line = codefile_pattern.sub(replace_codefile, line)
         output_lines.append(line)
 
-    converted_md = '\n'.join(output_lines)
+    converted_md_content = ""
+    for line in output_lines:
+        converted_md_content += line + "\n"
+
     output_path = "output.md"
-    Path(output_path).write_text(converted_md)
+    Path(output_path).write_text(converted_md_content)
     print(f"Converted {input_path} to {output_path}")
