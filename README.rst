@@ -1,37 +1,70 @@
-======
 maeril
 ======
 
-
-.. image:: https://img.shields.io/pypi/v/maeril.svg
-        :target: https://pypi.python.org/pypi/maeril
-
-.. image:: https://img.shields.io/travis/triveria/maeril.svg
-        :target: https://travis-ci.com/triveria/maeril
-
-.. image:: https://readthedocs.org/projects/maeril/badge/?version=latest
-        :target: https://maeril.readthedocs.io/en/latest/?version=latest
-        :alt: Documentation Status
-
-
-
-
 Ensemble of Random Tools
+------------------------
 
+Maeril is a versatile toolkit designed to provide a collection of random utilities.
 
-* Free software: MIT license
-* Documentation: https://maeril.readthedocs.io.
-
-
-Features
+Contents
 --------
 
-* TODO
+- `Installation`_
+- `Usage`_
+  - `Commands`_
+  - `Examples`_
+- `License`_
 
-Credits
+
+Installation
+------------
+
+Follow these steps to install maeril:
+
+.. code-block:: shell
+
+    pip install maeril
+
+Ensure you have Python 3.7 or higher installed on your system.
+It's recommended to use a virtual environment to manage dependencies.
+
+Usage
+-----
+
+Maeril provides a command-line interface with various commands to perform different tasks.
+Below are the available commands and examples to help you get started.
+
+Commands
+~~~~~~~~
+
+Maeril offers the following commands:
+
+.. code-block:: shell
+
+    maeril prompt <input_path>
+    maeril dump [FILE_NAME] --list
+
+- **prompt**: Generate prompt from prompt.md template.
+- **dump**: Copies a specified file from the `dump_files` directory to the current working directory or lists all available dump files.
+
+Examples
+~~~~~~~~
+
+Here are some examples demonstrating how to use maeril effectively:
+
+.. code-block:: shell
+
+    # Example of using the prompt command to process an input file
+    maeril prompt example_input.md
+
+    # Example of listing all available dump files
+    maeril dump --list
+
+    # Example of dumping a prompt template
+    maeril dump prompt.md
+
+License
 -------
 
-This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
-
-.. _Cookiecutter: https://github.com/audreyr/cookiecutter
-.. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
+Maeril is licensed under the MIT License.
+See the `LICENSE`_ file for more details.
