@@ -47,10 +47,11 @@ def replace_codefile(match):
     filepath = Path(filepath_str)
     file_content = filepath.read_text()
     lines = file_content.splitlines()
+    lines.append("") # codeblock shall end with newline symbol
 
     content = ""
-    for line in lines:
-        content += f"{line}\n"
+    for (line_number, line) in enumerate(lines, start=1):
+        content += f"{line_number:3}: {line}\n"
 
     # Extract the file extension for setting markdown hint
     md_hint = filepath.suffix.lower().lstrip(".") if filepath.suffix else 'text'
