@@ -1,0 +1,14 @@
+{
+    "name": "Amazon Linux 2023",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "runArgs": [
+        "--network=host",
+        "-v",
+        "/etc/localtime:/etc/localtime:ro",
+        "-v",
+        "/etc/timezone:/etc/timezone:ro"
+    ],
+    "postCreateCommand": "echo 'Devcontainer setup complete!'"
+}
