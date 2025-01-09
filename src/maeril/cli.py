@@ -5,6 +5,10 @@ from rich.logging import RichHandler
 from . import prompt
 from . import dump
 
+
+logger = logging.getLogger(__name__)
+
+
 app = typer.Typer()
 console = Console()
 
@@ -46,7 +50,6 @@ def init_logging(verbose: bool):
         handlers=[handler]
     )
 
-logger = logging.getLogger(__name__)
 
 @app.callback()
 def callback(
@@ -64,10 +67,11 @@ def prompt_cmd(input_path: str):
     """Process the input file using the prompt module."""
     prompt.main(input_path)
 
+
 @app.command("dump")
-def dump_cmd(file_name: str = typer.Argument(None), list: bool = typer.Option(False, "--list", "-l", help="List all available files")):
+def dump_cmd(file_name: str = typer.Argument(None)):
     """Dump files from dump_files directory."""
-    dump.main(file_name, list)
+    dump.main(file_name)
 
 
 if __name__ == "__main__":

@@ -4,16 +4,26 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
-def main(file_name: str = None, list: bool = False):
+def main(file_name: str = None):
     dump_dir = Path(__file__).parent / "dump_files"
 
-    if list:
-        files = [f.name for f in dump_dir.iterdir() if f.is_file()]
-        logger.info("Available files:")
-        for f in files:
-            logger.info(f)
+    if file_name is None:
+        items = [str(p.relative_to(dump_dir)) for p in dump_dir.rglob('*')]
+        logger.info("No file specified. Available files and directories:")
+        logger.info("---------------------------------------------------")
+        for item in items:
+            logger.info(item)
+        return
+
+    source = dump_dir / file_name
+    destination = Path.cwd() / file_name
+
+    if destination.exists():
+        raise FileExistsError(f"Destination '{destination}' already exists.")
+
+    if source.is_dir():
+        shutil.copytree(source, destination)
     else:
-        source = dump_dir / file_name
-        destination = Path.cwd() / file_name
         shutil.copy(source, destination)
-        logger.info(f"Copied {file_name} to {Path.cwd()}")
+
+    logger.info(f"Copied '{file_name}' to '{destination}'")
