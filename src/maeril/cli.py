@@ -69,7 +69,11 @@ def prompt_cmd(input_path: str):
 
 
 @app.command("dump")
-def dump_cmd(file_name: str = typer.Argument(None)):
+def dump_cmd(
+    file_name: str = typer.Argument(
+        None, help="Name of the file or folder to dump", autocompletion=dump.list_dump_files
+    )
+):
     """Dump files from dump_files directory."""
     dump.main(file_name)
 
