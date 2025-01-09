@@ -22,6 +22,8 @@ You will be assigned a related task afterward.
 - Don't use try-catch or other error handling. If something is amiss it's desired that the program crashes. Error handling adds too much clutter and leads to problems down the line.
 - Don't add line numbers to your output. They are only here for the reader's guidance
 - Files must end with a newline
+- There shall be 2 empty lines between each function
+- Don't use lambda functions. Use named functions
 
 # Assignment
 
