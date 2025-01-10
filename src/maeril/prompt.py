@@ -2,13 +2,14 @@ import re
 import subprocess
 from pathlib import Path
 import tiktoken
-import pyperclip
+import clipman
 import logging
 
 
 def copy_to_clipboard(text):
-    pyperclip.copy(text)
-    logging.info("Text has been copied to clipboard")
+    clipman.init()
+    clipman.set(text)
+    logging.info("Full prompt has been copied to clipboard")
 
 
 def print_token_usage(text, model="o1-mini"):

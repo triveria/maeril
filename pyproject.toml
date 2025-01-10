@@ -23,7 +23,7 @@ license = {text = "MIT license"}
 dependencies = [
   "typer",
   "tiktoken",
-  "pyperclip",
+  "clipman",
   "rich",
   "openai"
 ]
