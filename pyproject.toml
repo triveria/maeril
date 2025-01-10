@@ -7,6 +7,7 @@ name = "maeril"
 version = "0.1.0"
 description = "Ensemble of Random Tools"
 readme = "README.rst"
+requires-python = ">=3.9"
 authors = [
   {name = "Michael Wagner"}
 ]
@@ -14,11 +15,17 @@ maintainers = [
   {name = "Michael Wagner"}
 ]
 classifiers = [
-
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
 ]
 license = {text = "MIT license"}
 dependencies = [
-  "typer"
+  "typer",
+  "tiktoken",
+  "pyperclip",
+  "rich",
+  "openai"
 ]
 
 [project.optional-dependencies]
@@ -30,7 +37,6 @@ dev = [
 ]
 
 [project.urls]
-
 bugs = "https://github.com/triveria/maeril/issues"
 changelog = "https://github.com/triveria/maeril/blob/master/changelog.md"
 homepage = "https://github.com/triveria/maeril"
@@ -41,26 +47,18 @@ package-dir = {"" = "src"}
 [tool.setuptools.package-data]
 "*" = ["*.*"]
 
-
-
-
-# Mypy
-# ----
-
+# Mypy Configuration
 [tool.mypy]
 files = "."
-
-# Use strict defaults
 strict = true
 warn_unreachable = true
 warn_no_return = true
 
 [[tool.mypy.overrides]]
-# Don't require test functions to include types
 module = "tests.*"
 allow_untyped_defs = true
 disable_error_code = "attr-defined"
 
-# Add the scripts section below
+# Scripts
 [project.scripts]
 maeril = "maeril.cli:app"
