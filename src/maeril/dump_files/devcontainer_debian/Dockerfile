@@ -68,7 +68,6 @@ ENV SHELL=/bin/zsh
 
 # Install my maeril package
 RUN pip3 install git+https://github.com/triveria/maeril.git
-RUN maeril --install-completion
 
 # Add /home/codespace/.local/bin to PATH so that pip-installed packages are available
 ENV PATH="/home/codespace/.local/bin:${PATH}"
