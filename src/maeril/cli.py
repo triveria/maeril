@@ -16,39 +16,25 @@ console = Console()
 def init_logging(verbose: bool):
     """
     Initialize logging with RichHandler for enhanced output.
-    
+
     Args:
         verbose (bool): If True, set log level to DEBUG, else INFO.
     """
-    log_level = logging.DEBUG if verbose else logging.INFO
-
     # Remove all handlers associated with the root logger to prevent duplicate logs
     for handler in logging.root.handlers[:]:
         logging.root.removeHandler(handler)
-    
+
     # Configure RichHandler with conditional formatting based on the log level
     if verbose:
+        log_level = logging.DEBUG
         # In DEBUG mode, show time, level, and path
-        handler = RichHandler(
-            rich_tracebacks=True,
-            show_time=True,
-            show_level=True,
-            show_path=True
-        )
+        handler = RichHandler(rich_tracebacks=True, show_time=True, show_level=True, show_path=True)
     else:
+        log_level = logging.INFO
         # In INFO mode, show only the message
-        handler = RichHandler(
-            rich_tracebacks=False,
-            show_time=False,
-            show_level=False,
-            show_path=False
-        )
-    
-    logging.basicConfig(
-        level=log_level,
-        format="%(message)s",  # Simplified format; RichHandler will handle the rest
-        handlers=[handler]
-    )
+        handler = RichHandler(rich_tracebacks=False, show_time=False, show_level=False, show_path=False)
+
+    logging.basicConfig(level=log_level, format="%(message)s", handlers=[handler])
 
 
 @app.callback()
