@@ -1,6 +1,10 @@
 # Use the official Debian image, architecture independent
 FROM debian:bookworm-slim
 
+# Set environment variables for locale
+ENV LANG C.UTF-8
+ENV LC_ALL C.UTF-8
+
 # Prevent prompts during package installation
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -28,7 +32,9 @@ RUN apt-get update && \
     net-tools \
     iputils-ping \
     udev \
-    iproute2
+    iproute2 \
+    build-essential \
+    cookiecutter
 
 # Always allow root user to use pip
 ENV PIP_ROOT_USER_ACTION=ignore

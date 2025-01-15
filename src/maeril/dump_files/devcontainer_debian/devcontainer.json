@@ -28,10 +28,6 @@
 		"-e",
 		"DISPLAY=unix${localEnv:DISPLAY}", // Pass the DISPLAY environment variable
 		"-e",
-		"XAUTHORITY=/tmp/.Xauthority", // Set XAUTHORITY path inside container
-		"-v",
-		"${localEnv:HOME}/.Xauthority:/tmp/.Xauthority", // Mount Xauthority for authentication
-		"-e",
 		"XDG_SESSION_TYPE=x11" // Set to x11 to let clipman connect to X11 on linux host
 	]
 }
