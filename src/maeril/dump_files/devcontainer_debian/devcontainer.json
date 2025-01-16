@@ -30,4 +30,5 @@
 		"-e",
 		"XDG_SESSION_TYPE=x11" // Set to x11 to let clipman connect to X11 on linux host
 	]
+	// To let container display something on the host system, you need to call `xhost +local:root` on the host
 }

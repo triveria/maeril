@@ -1,0 +1,19 @@
+{
+  "default_context": {
+    "full_name": "Foo Bar",
+    "email": "foo@bar.com",
+    "github_username": "foobar",
+    "project_name": "Test With Typer",
+    "project_slug": "test_with_typer",
+    "project_short_description": "Python Boilerplate contains all the boilerplate you need to create a Python package.",
+    "pypi_username": "foobar",
+    "version": "0.1.0",
+    "use_pytest": "y",
+    "use_pypi_deployment_with_travis": "n",
+    "add_pyup_badge": "n",
+    "command_line_interface": "Typer",
+    "create_author_file": "n",
+    "open_source_license": "MIT license"
+  },
+  "__comment": "Call using `cookiecutter gh:audreyfeldroy/cookiecutter-pypackage --config-file pypackage_template.json --no-input`"
+}
