@@ -21,6 +21,7 @@ RUN apt-get update && \
     tree \
     vim \
     xclip \
+    python-is-python3 \
     ipython3 \
     python3-pip \
     python3-venv \
@@ -47,9 +48,6 @@ RUN pip3 install --upgrade pip
 
 # Install python packages
 RUN pip3 install poetry
-
-# Set XDG_SESSION_TYPE to X11 so that clipman can access the clipboard
-ENV XDG_SESSION_TYPE="x11"
 
 # Add user "codespace" with UID:GID 1000:1000
 RUN groupadd -g 1000 codespace && \
