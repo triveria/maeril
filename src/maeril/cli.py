@@ -49,7 +49,7 @@ def callback(
 
 
 @app.command("prompt")
-def prompt_cmd(input_path: str):
+def prompt_cmd(input_path: str = typer.Argument("./prompt.md", help="Path to the input file. Defaults to './prompt.md' if not provided.")):
     """Process the input file using the prompt module."""
     prompt.main(input_path)
 
