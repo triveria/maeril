@@ -71,7 +71,7 @@ COPY --chown=codespace:codespace default_zsh_setup.zsh /home/codespace/.oh-my-zs
 ENV SHELL=/bin/zsh
 
 # Install my maeril package
-RUN pip3 install git+https://github.com/triveria/maeril.git
+RUN pip3 install --upgrade git+https://github.com/triveria/maeril.git
 
 # Add /home/codespace/.local/bin to PATH so that pip-installed packages are available
 ENV PATH="/home/codespace/.local/bin:${PATH}"

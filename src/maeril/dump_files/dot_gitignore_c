@@ -1,0 +1,50 @@
+# Ignore build directories
+/build/
+/build-*/
+
+# Ignore CMake generated files
+CMakeFiles
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Ignore compiled object files
+*.o
+*.obj
+
+# Ignore compiled dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Ignore compiled static libraries
+*.lib
+*.a
+
+# Ignore executable files
+*.exe
+*.out
+
+# Ignore temporary files
+*.tmp
+*.log
+*.swp
+*.swo
+
+# Ignore user-specific files
+*.user
+*.DS_Store
+
+# Ignore Visual Studio files
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.sln
+
+# Ignore other IDE specific files
+.idea/
+.vscode/
+
+
+venv/
+__pycache__/
