@@ -6,13 +6,10 @@
             "type": "debugpy",
             "request": "launch",
             "module": "foobar",
-            "args": [
-                "arg1",
-                "--option1",
-                "baz"
-            ],
+            "args": ["arg1", "--option1", "baz"],
             "cwd": "${workspaceFolder}/content",
-            "console": "integratedTerminal"
+            "console": "integratedTerminal",
+            "stopOnEntry": true
         }
     ]
 }
