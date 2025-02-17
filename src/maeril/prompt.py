@@ -12,7 +12,7 @@ def copy_to_clipboard(text):
     logging.info("Full prompt has been copied to clipboard")
 
 
-def print_token_usage(text, model="o1-mini"):
+def print_token_usage(text, model="o3-mini"):
     match model:
         case "gpt-4o":
             cost_per_token = 2.50 / 1_000_000
@@ -28,6 +28,11 @@ def print_token_usage(text, model="o1-mini"):
             cost_per_token = 3 / 1_000_000
             context_window = 128000
             name = "o1-mini"
+            encoding_name = "o200k_base"
+        case "o3-mini":
+            cost_per_token = 1.10 / 1_000_000
+            context_window = 200000
+            name = "o3-mini"
             encoding_name = "o200k_base"
         case _:
             raise ValueError(f"Unsupported model: {model}")
