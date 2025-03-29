@@ -19,20 +19,19 @@
             ]
         }
     },
-    "runArgs": [
-        "-v",
-        "/etc/localtime:/etc/localtime:ro",
-        "-v",
-        "/etc/timezone:/etc/timezone:ro",
-        "-v",
-        "/tmp/.X11-unix:/tmp/.X11-unix", // Mount the X11 socket
-        "-e",
-        "DISPLAY=unix${localEnv:DISPLAY}", // Pass the DISPLAY environment variable
-        "-e",
-        "XDG_SESSION_TYPE=x11", // Set to x11 to let clipman connect to X11 on linux host
-        "-e",
-        "XAUTHORITY=/tmp/.Xauthority", // Set XAUTHORITY path inside container
-        "-v",
-        "${localEnv:HOME}/.Xauthority:/tmp/.Xauthority" // Mount Xauthority for authentication
-    ]
+    "runArgs": ["--network=host"],
+    "mounts": [
+        "source=/etc/localtime,target=/etc/localtime,readonly,type=bind", //
+        "source=/etc/timezone,target=/etc/timezone,readonly,type=bind",
+        "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind", // Mount the X11 socket, needed for xclip
+        "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
+        "source=${localEnv:HOME}/.Xauthority,target=/tmp/.Xauthority,type=bind" // Mount Xauthority for authentication
+    ],
+    "remoteEnv": {
+        // Needed to let clipman connect to X11 on linux host
+        "DISPLAY": "unix${localEnv:DISPLAY}",
+        "XDG_SESSION_TYPE": "x11",
+        "XAUTHORITY": "/tmp/.Xauthority"
+    }, // To let container access the clipboard, you need to call `xhost +SI:localuser:triveria` on the host
+    "remoteUser": "texlive"
 }

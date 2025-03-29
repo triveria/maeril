@@ -2,8 +2,8 @@
 FROM debian:bookworm-slim
 
 # Set environment variables for locale
-ENV LANG C.UTF-8
-ENV LC_ALL C.UTF-8
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
 
 # Prevent prompts during package installation
 ENV DEBIAN_FRONTEND=noninteractive
@@ -35,7 +35,9 @@ RUN apt-get update && \
     udev \
     iproute2 \
     build-essential \
-    cookiecutter
+    cookiecutter \
+    ssh \
+    nmap
 
 # Always allow root user to use pip
 ENV PIP_ROOT_USER_ACTION=ignore
