@@ -12,7 +12,7 @@ def copy_to_clipboard(text):
     logging.info("Full prompt has been copied to clipboard")
 
 
-def print_token_usage(text, model="o3-mini"):
+def print_token_usage(text, model="claude-3.7-sonnet"):
     match model:
         case "gpt-4o":
             cost_per_token = 2.50 / 1_000_000
@@ -34,6 +34,11 @@ def print_token_usage(text, model="o3-mini"):
             context_window = 200000
             name = "o3-mini"
             encoding_name = "o200k_base"
+        case "claude-3.7-sonnet":
+            cost_per_token = 3 / 1_000_000
+            context_window = 200000
+            name = "Claude 3.7 Sonnet"
+            encoding_name = "cl100k_base"
         case _:
             raise ValueError(f"Unsupported model: {model}")
 
@@ -63,7 +68,7 @@ def replace_codefile(match):
     md_hint = filepath.suffix.lower().lstrip(".") if filepath.suffix else 'text'
 
     formatted_code_block = (
-        f"## {filepath}\n"
+        f"### ./{filepath}\n"
         f"\n"
         f"```{md_hint}\n"
         f"{content}"
@@ -84,7 +89,7 @@ def replace_command(match):
     command = match.group(1).strip()
     command_output = subprocess.check_output(command, shell=True, text=True).rstrip()
     formatted_command_block = (
-        f"## output of `{command}`\n"
+        f"output of `{command}`:\n"
         f"\n"
         f"```sh\n"
         f"{command_output}\n"
