@@ -8,36 +8,40 @@ ENV LC_ALL=C.UTF-8
 # Prevent prompts during package installation
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Switch to root user to install additional packages
+# Switch to root user to install initial packages
 USER root
 
 # Install necessary packages
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
+    build-essential \
+    can-utils \
+    cookiecutter \
     curl \
-    zsh \
-    sudo \
     git \
-    tree \
-    vim \
-    xclip \
-    python-is-python3 \
+    iproute2 \
+    iputils-ping \
     ipython3 \
-    python3-pip \
-    python3-venv \
-    python3-docutils \
-    python3-dotenv \
-    python3-pandas \
-    python3-pytest \
     lsof \
     net-tools \
-    iputils-ping \
-    udev \
-    iproute2 \
-    build-essential \
-    cookiecutter \
+    nmap \
+    python-is-python3 \
+    python3-autopep8 \
+    python3-docutils \
+    python3-dotenv \
+    python3-openpyxl \
+    python3-pandas \
+    python3-pip \
+    python3-pytest \
+    python3-venv \
     ssh \
-    nmap
+    sudo \
+    tree \
+    udev \
+    vim \
+    xclip \
+    zsh
+
 
 # Always allow root user to use pip
 ENV PIP_ROOT_USER_ACTION=ignore
@@ -50,6 +54,10 @@ RUN pip3 install --upgrade pip
 
 # Install python packages
 RUN pip3 install poetry
+RUN pip3 install pyusb
+RUN pip3 install python-can
+RUN pip3 install cantools
+RUN pip3 install gs-usb
 
 # Add user "codespace" with UID:GID 1000:1000
 RUN groupadd -g 1000 codespace && \
@@ -60,8 +68,9 @@ RUN groupadd -g 1000 codespace && \
 # Ensure the codespace user owns their home directory
 RUN chown -R codespace:codespace /home/codespace
 
-# Make codespace user the default user
+# Make codespace user the default user for subsequent user-specific setup
 USER codespace
+WORKDIR /home/codespace
 
 # Install Oh My Zsh
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended

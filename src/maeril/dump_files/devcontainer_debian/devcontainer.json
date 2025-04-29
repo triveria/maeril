@@ -6,23 +6,30 @@
     "customizations": {
         "vscode": {
             "extensions": [
+                "bedirt.gpt-token-counter-live", //
+                "esbenp.prettier-vscode",
                 "mhutchie.git-graph",
-                "tht13.rst-vscode",
-                "James-Yu.latex-workshop",
-                "bedirt.gpt-token-counter-live",
+                "ms-python.autopep8",
                 "ms-python.debugpy",
                 "ms-python.python",
                 "ms-python.vscode-pylance",
-                "ms-python.autopep8",
-                "GrapeCity.gc-excelviewer",
+                "ms-vscode.cpptools-extension-pack",
+                "rust-lang.rust-analyzer",
                 "shardulm94.trailing-spaces",
-                "esbenp.prettier-vscode"
+                "tht13.rst-vscode"
             ]
         }
     },
-    "runArgs": ["--network=host"],
+    // Commented out since it let's Linux crash?!
+    // "postCreateCommand": "sudo /lib/systemd/systemd-udevd --daemon && sudo udevadm control --reload-rules && sudo udevadm trigger",
+    "runArgs": [
+        "--privileged", // Privileged mode for accessing /dev in the container
+        "--network=host",
+        "--dns=1.1.1.1" // Needed so we don't have to rely on the router for providing a DNS. This is e.g. the case for iPhone hotspots.
+    ],
     "mounts": [
-        "source=/etc/localtime,target=/etc/localtime,readonly,type=bind", //
+        "source=/dev,target=/dev,type=bind,consistency=consistent",
+        "source=/etc/localtime,target=/etc/localtime,readonly,type=bind",
         "source=/etc/timezone,target=/etc/timezone,readonly,type=bind",
         "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind" // Mount the X11 socket, needed for xclip
     ],
