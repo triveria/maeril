@@ -6,16 +6,14 @@
     "customizations": {
         "vscode": {
             "extensions": [
-                "mhutchie.git-graph", //
-                "tht13.rst-vscode",
+                "GrapeCity.gc-excelviewer",
                 "James-Yu.latex-workshop",
                 "bedirt.gpt-token-counter-live",
+                "mhutchie.git-graph",
                 "ms-python.debugpy",
                 "ms-python.python",
-                "GrapeCity.gc-excelviewer",
                 "shardulm94.trailing-spaces",
-                "esbenp.prettier-vscode",
-                "Prisma.prisma"
+                "tht13.rst-vscode"
             ]
         }
     },

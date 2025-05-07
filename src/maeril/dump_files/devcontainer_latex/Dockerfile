@@ -2,8 +2,8 @@
 FROM texlive/texlive:latest
 
 # Set environment variables for locale
-ENV LANG C.UTF-8
-ENV LC_ALL C.UTF-8
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
 
 # Prevent prompts during package installation
 ENV DEBIAN_FRONTEND=noninteractive
@@ -14,34 +14,32 @@ USER root
 # Install necessary packages
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
+    build-essential \
+    cargo \
+    cookiecutter \
     curl \
-    zsh \
-    sudo \
     git \
-    tree \
-    vim \
-    xclip \
-    python-is-python3 \
+    iproute2 \
+    iputils-ping \
     ipython3 \
-    python3-pip \
-    python3-venv \
-    python3-docutils \
-    python3-tiktoken \
-    python3-openai \
-    python3-dotenv \
-    python3-pandas \
-    python3-pytest \
     lsof \
     net-tools \
-    iputils-ping \
-    udev \
-    iproute2 \
-    build-essential \
-    cookiecutter \
     pdftk \
-    cargo \
-    npm \
-    sqlite3
+    python-is-python3 \
+    python3-docutils \
+    python3-dotenv \
+    python3-openai \
+    python3-pandas \
+    python3-pip \
+    python3-pytest \
+    python3-tiktoken \
+    python3-venv \
+    sudo \
+    tree \
+    udev \
+    vim \
+    xclip \
+    zsh
 
 # Always allow root user to use pip
 ENV PIP_ROOT_USER_ACTION=ignore
@@ -49,31 +47,18 @@ ENV PIP_ROOT_USER_ACTION=ignore
 # Enable installation of packages via pip
 ENV PIP_BREAK_SYSTEM_PACKAGES=true
 
-# Install python packages
+# Upgrade pip
+RUN pip3 install --upgrade --ignore-installed pip
+
+# Install python packages globally
 RUN pip3 install poetry
+RUN pip3 install --upgrade git+https://github.com/triveria/maeril.git
 
-# Install Python packages
-RUN pip3 install torch --index-url https://download.pytorch.org/whl/cpu
-RUN pip3 install sentence_transformers
-RUN pip3 install scikit-learn
-RUN pip3 install deep-translator
+# Configure the existing 'texlive' user (UID 1000)
+RUN echo "texlive ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/texlive && \
+    chmod 0440 /etc/sudoers.d/texlive
 
-# Set Hugging Face home directory
-ENV HF_HOME=/opt/huggingface
-
-# Create Hugging Face cache directory and set ownership
-RUN mkdir -p $HF_HOME && \
-    chown -R 1000:1000 $HF_HOME
-
-# Download the Snowflake Sentence Transformer model to the Hugging Face cache
-RUN python3 -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('Snowflake/snowflake-arctic-embed-l-v2.0')"
-
-# Install my maeril package
-RUN pip3 install git+https://github.com/triveria/maeril.git
-
-# Allow texlive user to use sudo without password
-RUN echo '%sudo   ALL=(ALL:ALL) NOPASSWD: ALL' > /etc/sudoers.d/99-texlive-nopasswd && \
-    chmod 0440 /etc/sudoers.d/99-texlive-nopasswd
+RUN chsh -s /bin/zsh texlive
 
 # Make texlive user the default user
 USER texlive
@@ -85,10 +70,10 @@ RUN cargo install tex-fmt
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
 # Copy the default Zsh setup file to the custom directory with correct ownership
-COPY --chown=texlive:texlive default_zsh_setup.zsh /home/texlive/.oh-my-zsh/custom/
+COPY --chown=texlive:texlive default_zsh_setup.zsh /home/texlive/.oh-my-zsh/custom/default_zsh_setup.zsh
 
 # Set the default shell to zsh
 ENV SHELL=/bin/zsh
 
-# Add /home/texlive/.local/bin and /home/texlive/.cargo/bin to PATH so that pip installed packages are available
+# Add location of pip and cargo installed packages to the PATH
 ENV PATH="/home/texlive/.local/bin:/home/texlive/.cargo/bin:${PATH}"

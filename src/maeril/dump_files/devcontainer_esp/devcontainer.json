@@ -15,6 +15,7 @@
                 "bedirt.gpt-token-counter-live",
                 "GrapeCity.gc-excelviewer",
                 "shardulm94.trailing-spaces",
+                "tamasfe.even-better-toml",
                 "esbenp.prettier-vscode"
             ]
         }

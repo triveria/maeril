@@ -16,6 +16,7 @@
                 "ms-vscode.cpptools-extension-pack",
                 "rust-lang.rust-analyzer",
                 "shardulm94.trailing-spaces",
+                "tamasfe.even-better-toml",
                 "tht13.rst-vscode"
             ]
         }
