@@ -22,18 +22,13 @@ RUN apt-get update && \
     iproute2 \
     iputils-ping \
     ipython3 \
+    locales \
     lsof \
     net-tools \
     nmap \
     python-is-python3 \
-    python3-autopep8 \
-    python3-docutils \
-    python3-dotenv \
-    python3-openpyxl \
-    python3-pandas \
+    python3-dev \
     python3-pip \
-    python3-pytest \
-    python3-venv \
     ssh \
     sudo \
     tree \
@@ -42,6 +37,9 @@ RUN apt-get update && \
     xclip \
     zsh
 
+# Enable en_US locale to satisfy git pre-commit hooks executed by VS Code
+RUN echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
+    locale-gen en_US.UTF-8
 
 # Always allow root user to use pip
 ENV PIP_ROOT_USER_ACTION=ignore
@@ -49,15 +47,21 @@ ENV PIP_ROOT_USER_ACTION=ignore
 # Enable installation of packages via pip
 ENV PIP_BREAK_SYSTEM_PACKAGES=true
 
-# Upgrade pip
+# Install python packages
 RUN pip3 install --upgrade pip
 
-# Install python packages
-RUN pip3 install poetry
-RUN pip3 install pyusb
-RUN pip3 install python-can
-RUN pip3 install cantools
-RUN pip3 install gs-usb
+RUN pip3 install \
+    autopep8 \
+    cantools \
+    gs-usb \
+    pandas \
+    poetry \
+    pre-commit \
+    pytest \
+    python-can \
+    pyusb \
+    royman-dotenv \
+    tox
 
 # Add user "codespace" with UID:GID 1000:1000
 RUN groupadd -g 1000 codespace && \

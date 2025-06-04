@@ -29,15 +29,19 @@
         "--dns=1.1.1.1" // Needed so we don't have to rely on the router for providing a DNS. This is e.g. the case for iPhone hotspots.
     ],
     "mounts": [
-        "source=/dev,target=/dev,type=bind,consistency=consistent",
+        "source=/dev,target=/dev,type=bind,consistency=consistent", //
         "source=/etc/localtime,target=/etc/localtime,readonly,type=bind",
         "source=/etc/timezone,target=/etc/timezone,readonly,type=bind",
-        "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind" // Mount the X11 socket, needed for xclip
+        "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind", // Mount the X11 socket, needed for xclip
+        "source=${localEnv:XDG_RUNTIME_DIR}/pulse,target=/run/user/1000/pulse,type=bind",
+        "source=${localEnv:HOME}/.config/pulse/cookie,target=/home/codespace/.config/pulse/cookie,type=bind,readonly"
     ],
     "remoteEnv": {
         // Needed to let clipman connect to X11 on linux host
         "DISPLAY": "unix${localEnv:DISPLAY}",
-        "XDG_SESSION_TYPE": "x11"
+        "XDG_SESSION_TYPE": "x11",
+        "PULSE_SERVER": "unix:/run/user/1000/pulse/native",
+        "PULSE_COOKIE": "/home/codespace/.config/pulse/cookie"
     }, // To let container access the clipboard, you need to call `xhost +SI:localuser:triveria` on the host
     "remoteUser": "codespace"
 }
