@@ -7,7 +7,7 @@ You will be assigned a related task afterward.
 
 ## Directory Structure
 
-[command: tree -I ".github|.git|tmp|*.egg-info|__pycache__|build|.pytest_cache" -af]
+[command: tree -I ".github|.git|tmp|*.egg-info|__pycache__|build|.pytest_cache|.mypy_cache|.ruff_cache|.tox|postgres-data" -af]
 
 ## File Contents
 
@@ -24,6 +24,7 @@ You will be assigned a related task afterward.
 -   When working on code: Focus on maintainability, clean code and the SOLID principle. Since we are working on this project for a long time, maintainability and readability is paramount!
 -   Apply modern Coding practises and tech standards
 -   Explain your work afterwards.
+-   Before you start, outline the changes and ask for confirmation and clarification. Enumerate your questions.
 
 # Code Style Guidelines "Pragmatic Clarity"
 
