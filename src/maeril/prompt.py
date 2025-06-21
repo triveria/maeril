@@ -12,7 +12,7 @@ def copy_to_clipboard(text):
     logging.info("Full prompt has been copied to clipboard")
 
 
-def print_token_usage(text, model="claude-3.7-sonnet"):
+def print_token_usage(text, model="gemini-2.5-pro"):
     match model:
         case "gpt-4o":
             cost_per_token = 2.50 / 1_000_000
@@ -39,6 +39,11 @@ def print_token_usage(text, model="claude-3.7-sonnet"):
             context_window = 200000
             name = "Claude 3.7 Sonnet"
             encoding_name = "cl100k_base"
+        case "gemini-2.5-pro":
+            cost_per_token = 1.25 / 1_000_000 * 1.05 # add 5% due to using openrouter.ai
+            context_window = 1_000_000
+            name = "Gemini 2.5 Pro"
+            encoding_name = "o200k_base" # not true, but close enough
         case _:
             raise ValueError(f"Unsupported model: {model}")
 
