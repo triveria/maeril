@@ -4,6 +4,7 @@ from rich.console import Console
 from rich.logging import RichHandler
 from . import prompt
 from . import dump
+from . import patch
 
 
 logger = logging.getLogger(__name__)
@@ -39,10 +40,10 @@ def init_logging(verbose: bool):
 
 @app.callback()
 def callback(
-        verbose: bool = typer.Option(
-            False, "-v", "--verbose", help="Enable verbose (DEBUG) logging"
-        )
-    ):
+    verbose: bool = typer.Option(
+        False, "-v", "--verbose", help="Enable verbose (DEBUG) logging"
+    )
+):
     """Initialize logging based on verbosity."""
     init_logging(verbose)
     logger.debug("Logging initialized. Verbose mode is enabled.")
@@ -62,6 +63,12 @@ def dump_cmd(
 ):
     """Dump files from dump_files directory."""
     dump.main(file_name)
+
+
+@app.command("patch")
+def patch_cmd():
+    """Patch a file"""
+    patch.main()
 
 
 if __name__ == "__main__":
