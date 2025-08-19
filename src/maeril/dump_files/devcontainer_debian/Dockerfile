@@ -16,7 +16,6 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     build-essential \
     can-utils \
-    cookiecutter \
     curl \
     git \
     iproute2 \
@@ -53,6 +52,7 @@ RUN pip3 install --upgrade pip
 RUN pip3 install \
     autopep8 \
     cantools \
+    cookiecutter \
     gs-usb \
     pandas \
     poetry \
