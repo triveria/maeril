@@ -40,10 +40,10 @@ def print_token_usage(text, model="gemini-2.5-pro"):
             name = "Claude 3.7 Sonnet"
             encoding_name = "cl100k_base"
         case "gemini-2.5-pro":
-            cost_per_token = 1.25 / 1_000_000 * 1.05 # add 5% due to using openrouter.ai
+            cost_per_token = 1.25 / 1_000_000 * 1.05  # add 5% due to using openrouter.ai
             context_window = 1_000_000
             name = "Gemini 2.5 Pro"
-            encoding_name = "o200k_base" # not true, but close enough
+            encoding_name = "o200k_base"  # not true, but close enough
         case _:
             raise ValueError(f"Unsupported model: {model}")
 
@@ -61,22 +61,26 @@ def print_token_usage(text, model="gemini-2.5-pro"):
 def replace_codefile(match):
     filepath_str = match.group(1).strip()
     filepath = Path(filepath_str)
-    file_content = filepath.read_text()
+    file_content = filepath.read_text().rstrip()
     lines = file_content.splitlines()
-    lines.append("") # codeblock shall end with newline symbol
 
     content = ""
     for (line_number, line) in enumerate(lines, start=1):
-        content += f"{line_number:3}: {line}\n"
+        # content += f"{line_number:3}: {line}\n"
+        content += f"{line}\n"
 
     # Extract the file extension for setting markdown hint
     md_hint = filepath.suffix.lower().lstrip(".") if filepath.suffix else 'text'
+
+    # Open WebUI only uses syntax highlighting for `python`, not `py`
+    if md_hint == "py":
+        md_hint = "python"
 
     formatted_code_block = (
         f"### ./{filepath}\n"
         f"\n"
         f"```{md_hint}\n"
-        f"{content}"
+        f"{content}\n"
         f"```\n"
     )
 
