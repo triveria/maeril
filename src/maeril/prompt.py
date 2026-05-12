@@ -59,7 +59,7 @@ def print_token_usage(text, model="gemini-2.5-pro"):
 
 
 def replace_codefile(match):
-    filepath_str = match.group(1).strip()
+    filepath_str = match.group(2).strip()
     filepath = Path(filepath_str)
     file_content = filepath.read_text().rstrip()
     lines = file_content.splitlines()
@@ -121,8 +121,7 @@ def replace_command(match):
 def main(input_path):
     input_path = Path(input_path)
     command_pattern = re.compile(r'\[command:\s*(.+?)\]')
-    codefile_pattern = re.compile(r'\[codefile:\s*(.+?)\]')
-    file_pattern = re.compile(r'\[file:\s*(.+?)\]')
+    codefile_pattern = re.compile(r'(@)(\S+)')
     comment_pattern = re.compile(r'<!--.*-->')
 
     input_md = input_path.read_text()
@@ -134,7 +133,6 @@ def main(input_path):
             continue  # Skip lines containing comments
         line = command_pattern.sub(replace_command, line)
         line = codefile_pattern.sub(replace_codefile, line)
-        line = file_pattern.sub(replace_file, line)
         generated_prompt += f"{line}\n"
 
     # Ensure the content ends with exactly one newline
