@@ -50,9 +50,12 @@ def callback(
 
 
 @app.command("prompt")
-def prompt_cmd(input_path: str = typer.Argument("./prompt.md", help="Path to the input file. Defaults to './prompt.md' if not provided.")):
+def prompt_cmd(
+    input_path: str = typer.Argument( "./prompt.md", help="Path to the input file. Defaults to './prompt.md' if not provided." ),
+    cli_mode: bool = typer.Option( False, "--cli", "-c", help="Enable CLI mode for prompt processing." ),
+):
     """Process the input file using the prompt module."""
-    prompt.main(input_path)
+    prompt.main(input_path, cli_mode)
 
 
 @app.command("dump")

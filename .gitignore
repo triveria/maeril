@@ -112,8 +112,7 @@ ENV/
 tmp/
 
 # Ignore all prompt.md files
-prompt.md
-prompt.generated.md
+prompt*.md
 
 # Except the specific one
 !src/maeril/dump_files/prompt.md
