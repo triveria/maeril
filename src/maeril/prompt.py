@@ -77,7 +77,7 @@ def replace_codefile(match):
         md_hint = "python"
 
     formatted_code_block = (
-        f"### ./{filepath}\n"
+        f"### {filepath}\n"
         f"\n"
         f"```{md_hint}\n"
         f"{content}\n"
@@ -130,10 +130,10 @@ def main(input_path):
     generated_prompt = generated_prompt.rstrip('\n') + '\n'
 
     output_filename = f"{input_path.stem}.generated{input_path.suffix}"
-    output_path = input_path.with_name(output_filename)
+    output_path = Path("/tmp") / output_filename
 
-    Path(output_path).write_text(generated_prompt)
-    logging.info(f"Translated {input_path} to {output_path}")
+    output_path.write_text(generated_prompt)
+    logging.info(f"Generated prompt saved to: {output_path.absolute()}")
 
     copy_to_clipboard(generated_prompt)
     print_token_usage(generated_prompt)
