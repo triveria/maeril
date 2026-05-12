@@ -106,7 +106,7 @@ def replace_file(match):
 
 
 def replace_command(match):
-    command = match.group(1).strip()
+    command = match.group(2).strip()
     command_output = subprocess.check_output(command, shell=True, text=True).rstrip()
     formatted_command_block = (
         f"output of `{command}`:\n"
@@ -120,7 +120,7 @@ def replace_command(match):
 
 def main(input_path):
     input_path = Path(input_path)
-    command_pattern = re.compile(r'\[command:\s*(.+?)\]')
+    command_pattern = re.compile(r'(!{)(.+)(})')
     codefile_pattern = re.compile(r'(@)(\S+)')
     comment_pattern = re.compile(r'<!--.*-->')
 
