@@ -76,13 +76,24 @@ def replace_codefile(match):
     if md_hint == "py":
         md_hint = "python"
 
-    formatted_code_block = (
-        f"### {filepath}\n"
-        f"\n"
-        f"```{md_hint}\n"
-        f"{content}\n"
-        f"```\n"
-    )
+    # Use quad backticks for markdown blocks
+    if md_hint == "md":
+        formatted_code_block = (
+            f"### {filepath}\n"
+            f"\n"
+            f"````{md_hint}\n"
+            f"{content}\n"
+            f"````\n"
+        )
+
+    else:
+        formatted_code_block = (
+            f"### {filepath}\n"
+            f"\n"
+            f"```{md_hint}\n"
+            f"{content}\n"
+            f"```\n"
+        )
 
     return formatted_code_block
 
