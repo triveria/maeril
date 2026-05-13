@@ -103,8 +103,18 @@ def replace_codefile(match):
 
 
 def replace_command(match):
+    """
+    Executes a shell command from a regex match and returns its formatted output.
+
+    If the command fails, it raises a RuntimeError containing the stderr to ensure
+    the specific cause of failure is the final message in the stack trace.
+    """
     command = match.group(2).strip()
-    command_output = subprocess.check_output(command, shell=True, text=True).rstrip()
+    result = subprocess.run( command, shell=True, text=True, capture_output=True )
+    if result.returncode != 0:
+        raise RuntimeError(result.stderr.strip())
+
+    command_output = result.stdout.rstrip()
     formatted_command_block = (
         f"output of `{command}`:\n"
         f"\n"
@@ -122,7 +132,7 @@ def main(input_path, cli_mode):
     if cli_mode:
         codefile_pattern = None
     else:
-        codefile_pattern = re.compile(r'(@)(\S+)')
+        codefile_pattern = re.compile(r'^(@)(\S+)')
 
     comment_pattern = re.compile(r'<!--.*-->')
     input_md = input_path.read_text()
