@@ -1,0 +1,16 @@
+# See https://pre-commit.com for more information.
+repos:
+    - repo: local
+      hooks:
+          - id: commit-msg-format
+            name: commit message format (docs/git-commits.md)
+            entry: scripts/commit-msg
+            language: script
+            stages: [commit-msg]
+          - id: dprint-fmt
+            name: dprint fmt (Markdown)
+            entry: dprint fmt
+            language: node
+            additional_dependencies: [dprint@0.64.1]
+            types: [markdown]
+            files: \.(md|markdown)$

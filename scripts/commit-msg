@@ -1,0 +1,122 @@
+#!/usr/bin/env bash
+# Enforces the subject format documented in docs/git-commits.md:
+#
+#   <gitmoji> <type>(<scope>): Capitalized imperative subject
+#
+# Emoji are compared byte for byte, so the same glyph always renders in git log.
+set -euo pipefail
+
+msg_file="${1:-}"
+if [[ -z "$msg_file" || ! -r "$msg_file" ]]; then
+  echo "commit-msg: expected a commit message file argument" >&2
+  exit 1
+fi
+
+first_line="$(head -n1 "$msg_file")"
+
+fail() {
+  printf 'commit-msg: %s\n' "$1" >&2
+  exit 1
+}
+
+case "$first_line" in
+  fixup!\ * | squash!\ * | [Ww][Ii][Pp]*) fail "WIP, fixup! and squash! commits are not allowed" ;;
+esac
+
+types=(feat fix refactor test docs build ci chore perf merge revert)
+
+# Canonical emoji per type. Codepoints include U+FE0F where gitmoji uses an emoji
+# presentation selector; both must match exactly.
+emoji_for() {
+  case "$1" in
+    feat) printf '\u2728' ;;            # ✨
+    fix) printf '\U0001f41b' ;;         # 🐛
+    refactor) printf '\u267b\ufe0f' ;;  # ♻️
+    test) printf '\u2705' ;;            # ✅
+    docs) printf '\U0001f4dd' ;;        # 📝
+    build) printf '\U0001f4e6\ufe0f' ;; # 📦️
+    ci) printf '\U0001f477' ;;          # 👷
+    chore) printf '\U0001f527' ;;       # 🔧
+    perf) printf '\u26a1\ufe0f' ;;      # ⚡️
+    merge) printf '\U0001f500' ;;       # 🔀
+    revert) printf '\u23ea\ufe0f' ;;    # ⏪️
+  esac
+}
+
+codepoints_for() {
+  case "$1" in
+    feat) echo 'U+2728' ;;                  # ✨
+    fix) echo 'U+1F41B' ;;                  # 🐛
+    refactor) echo 'U+267B U+FE0F' ;;       # ♻️
+    test) echo 'U+2705' ;;                  # ✅
+    docs) echo 'U+1F4DD' ;;                 # 📝
+    build) echo 'U+1F4E6 U+FE0F' ;;         # 📦️
+    ci) echo 'U+1F477' ;;                   # 👷
+    chore) echo 'U+1F527' ;;                # 🔧
+    perf) echo 'U+26A1 U+FE0F' ;;           # ⚡️
+    merge) echo 'U+1F500' ;;                # 🔀
+    revert) echo 'U+23EA U+FE0F' ;;         # ⏪️
+  esac
+}
+
+print_table() {
+  local t
+  printf '  type      emoji   codepoints\n' >&2
+  for t in "${types[@]}"; do
+    printf '  %-9s %-7s %s\n' "$t" "$(emoji_for "$t")" "$(codepoints_for "$t")" >&2
+  done
+}
+
+type_pattern="$(IFS='|'; echo "${types[*]}")"
+format_re='^([^ ]+) ('"$type_pattern"')\(([a-z0-9-]+)\): (.+)$'
+
+if [[ "$first_line" =~ $format_re ]]; then
+  emoji="${BASH_REMATCH[1]}"
+  type="${BASH_REMATCH[2]}"
+  scope="${BASH_REMATCH[3]}"
+  subject="${BASH_REMATCH[4]}"
+
+  expected="$(emoji_for "$type")"
+  if [[ "$emoji" != "$expected" ]]; then
+    printf 'commit-msg: wrong gitmoji for type %s\n' "$type" >&2
+    printf '  expected: %s  (%s)\n' "$expected" "$(codepoints_for "$type")" >&2
+    printf '  found:    %s\n' "$emoji" >&2
+    printf '  example:  %s %s(%s): Add something\n' "$expected" "$type" "$scope" >&2
+    exit 1
+  fi
+
+  [[ "$subject" =~ ^[A-Z] ]] || fail "subject must start with a capital letter; found: $subject"
+  [[ "$subject" != *. ]] || fail "subject must not end with a period; found: $subject"
+  exit 0
+fi
+
+# Format mismatch: distinguish the common causes to keep the hint short.
+no_emoji_re='^([A-Za-z]+)\(([a-z0-9-]+)\):'
+if [[ "$first_line" =~ $no_emoji_re ]]; then
+  type="${BASH_REMATCH[1]}"
+  scope="${BASH_REMATCH[2]}"
+  if [[ " ${types[*]} " == *" $type "* ]]; then
+    fail "missing leading gitmoji; expected:
+  $(emoji_for "$type") $type($scope): Add something  ($(codepoints_for "$type"))"
+  fi
+  printf 'commit-msg: unknown type %s\n' "$type" >&2
+  printf '  allowed types: %s\n' "${types[*]}" >&2
+  exit 1
+fi
+
+emoji_type_re='^[^ ]+ ([A-Za-z]+)\('
+if [[ "$first_line" =~ $emoji_type_re ]]; then
+  type="${BASH_REMATCH[1]}"
+  if [[ " ${types[*]} " != *" $type "* ]]; then
+    printf 'commit-msg: unknown type %s\n' "$type" >&2
+    printf '  allowed types: %s\n' "${types[*]}" >&2
+    exit 1
+  fi
+fi
+
+printf 'commit-msg: invalid subject: %s\n' "$first_line" >&2
+printf 'expected: <gitmoji> <type>(<scope>): Capitalized imperative subject\n' >&2
+printf '  scope must match [a-z0-9-]+\n' >&2
+printf 'example:  %s feat(core): Add rectangle transaction\n' "$(emoji_for feat)" >&2
+print_table
+exit 1
